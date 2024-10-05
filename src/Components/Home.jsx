@@ -1,14 +1,13 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios';
-import VoiceWidget from "./VoiceWidget";
-
+import OpenAIChat from './OpenAIChat';
 function Home() {
     const [userEmailFound, setUserEmailFound] = useState(false)
   
     useEffect(() => {
     
       const checkUserEmail = async () => {
-        const response = await axios.get(`http://localhost:8080/checkUserEmail/?email=${'admin@gmail.com'}`)
+        const response = await axios.get(`http://localhost:5000/checkUserEmail/?email=${'admin@gmail.com'}`)
         setUserEmailFound(response.data.found)
       }
 
@@ -22,7 +21,7 @@ function Home() {
       <div>
         {userEmailFound ? "found email" : "email not found"}
       </div>
-      <VoiceWidget/>
+    <OpenAIChat/>
     </>
   )
 }

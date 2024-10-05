@@ -83,7 +83,7 @@ app.post('/attemptLogin', async (req, res) => {
    if(user)
     res.json({ successful: true });
    else
-    res.json({ successful: true });
+    res.json({ successful: false });
 
  } catch (error) {
    console.error("Error adding user:", error);

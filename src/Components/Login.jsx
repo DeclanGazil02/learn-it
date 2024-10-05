@@ -46,7 +46,7 @@ function Login() {
       
           if (response.data.successful) {
             console.log('Sign in successful');
-            navigate("/upload")
+            navigate("/tutors")
           } else {
             console.error('Failed to sign in:', response.data.message);
             setErrors({email: "Incorrect Password or User Name."})
