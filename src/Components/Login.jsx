@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import './Login.css';
 
 
@@ -67,9 +68,15 @@ function Login() {
           </Form.Group>
 
 
+
           <Button variant="primary" type="submit" className="login-button">
             Login
           </Button>
+
+          <div className="create-account-text">
+            <p>Don't have an account? <Link to="signup">Create account</Link>
+            </p>
+          </div>
         </Form>
       </div>
     </div>
