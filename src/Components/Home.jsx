@@ -1,12 +1,25 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import axios from 'axios';
 
 function Home() {
-  const [count, setCount] = useState(0)
+    const [userEmailFound, setUserEmailFound] = useState(false)
+  
+    useEffect(() => {
+    
+      const checkUserEmail = async () => {
+        const response = await axios.get(`http://localhost:5000/checkUserEmail/?email=${'admin@gmail.com'}`)
+        setUserEmailFound(response.data.found)
+      }
+
+      console.log("getting userEmail")
+      checkUserEmail();
+    }, [])
 
   return (
     <>
+    SIGMA!
       <div>
-        Upload your video
+        {userEmailFound ? "found email" : "email not found"}
       </div>
     </>
   )

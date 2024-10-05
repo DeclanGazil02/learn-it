@@ -1,13 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
 import './SignUp.css';
-
+import axios from 'axios';
 
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({});
-
 
   const validateForm = () => {
     const newErrors = {};
@@ -19,15 +18,20 @@ function Login() {
   };
 
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const formErrors = validateForm();
     if (Object.keys(formErrors).length > 0) {
       setErrors(formErrors);
     } else {
       setErrors({});
-      console.log('Login attempted with:', { email, password });
-      // Here you would typically send a request to your server
+
+      // Send a request to your server
+      const response = await axios.get(`http://localhost:5000/checkUserEmail/?email=${email}`)
+      let userEmailFound = response.data.found 
+
+      if(userEmailFound)
+        setErrors({email: "Email already in use."})
     }
   };
 
