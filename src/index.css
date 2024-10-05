@@ -66,3 +66,13 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+body.dark-mode {
+background-color: #121212;
+color: #e0e0e0;
+}
+
+header.dark-mode, footer.dark-mode{
+
+
+  background-color: #333
+}
