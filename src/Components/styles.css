@@ -1,0 +1,24 @@
+.chat-bubble {
+    background-color: #f1f1f1;
+    /* Background color for chat bubble */
+    border-radius: 15px;
+    /* Rounded corners */
+    padding: 8px 12px;
+    /* Reduced padding for a tighter fit */
+    margin: 5px 0;
+    /* Spacing between messages */
+    display: inline-block;
+    /* Ensure the bubble fits around the text */
+    max-width: 75%;
+    /* Prevent bubbles from being too wide */
+    word-wrap: break-word;
+    /* Ensure long words wrap within the bubble */
+}
+
+.chat-container {
+    display: flex;
+    flex-direction: column;
+    /* Stack messages vertically */
+    align-items: flex-end;
+    /* Align messages to the left */
+}

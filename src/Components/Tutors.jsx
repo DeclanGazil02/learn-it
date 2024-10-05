@@ -4,12 +4,18 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import './styles.css'; // Import your styles for chat bubble
 
 function Tutors() {
     const [message, setMessage] = useState('');
+    const [messages, setMessages] = useState([]); // State to hold chat messages
 
     const handleSend = (e) => {
         e.preventDefault();
+        if (message.trim() === '') return; // Prevent sending empty messages
+
+        // Add the new message to the messages array
+        setMessages([...messages, message]);
         console.log("Message sent:", message);
         setMessage(''); // Clear the input after sending
     };
@@ -36,9 +42,16 @@ function Tutors() {
                 <Col sm={6} className="p-3 bg-white d-flex flex-column" style={{ height: '100%' }}>
                     <div className="flex-grow-1 d-flex flex-column">
                         <h2>Chat</h2>
-                        <div className="flex-grow-1 overflow-auto">
-                            <p>Chat content goes here</p>
-                            {/* Add more chat messages or components here */}
+                        <div className="chat-container flex-grow-1 overflow-auto">
+                            {messages.length > 0 ? (
+                                messages.map((msg, index) => (
+                                    <div key={index} className="chat-bubble">
+                                        {msg}
+                                    </div>
+                                ))
+                            ) : (
+                                <p>No messages yet.</p>
+                            )}
                         </div>
                     </div>
 
@@ -51,7 +64,7 @@ function Tutors() {
                             onChange={(e) => setMessage(e.target.value)}
                             className="me-2" // margin to the right of the input
                         />
-                        <Button type="submit">Send</Button>
+                        <Button variant="warning" type="submit">Send</Button>
                     </Form>
                 </Col>
             </Row>
