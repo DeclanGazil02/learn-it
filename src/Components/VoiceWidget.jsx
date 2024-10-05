@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import { useLeopard } from "@picovoice/leopard-react";
-import dotenv from 'dotenv';
 import { Button } from "react-bootstrap";
 
 export default function VoiceWidget() {
@@ -17,15 +16,15 @@ export default function VoiceWidget() {
 
   useEffect(() => {
     const initEngine = async () => {
-        await init(
-          `KTmOBEvRdEQnvqIvYFaj9cSF5qDX1s2SrTZ02uj0Co6Ux1B53EPKAw==`,
-          { publicPath: "/leopard_params.pv" },
-          { enableAutomaticPunctuation: true }
-        );
-      };
+      await init(
+        `KTmOBEvRdEQnvqIvYFaj9cSF5qDX1s2SrTZ02uj0Co6Ux1B53EPKAw==`,
+        { publicPath: "/leopard_params.pv" },
+        { enableAutomaticPunctuation: true }
+      );
+    };
     initEngine();
   }, [])
-  
+
 
 
   const toggleRecord = async () => {
@@ -35,7 +34,7 @@ export default function VoiceWidget() {
       await startRecording();
     }
   };
-  
+
   return (
     <div>
       {error && <p className="error-message">{error.toString()}</p>}
@@ -56,7 +55,7 @@ export default function VoiceWidget() {
       <label htmlFor="audio-record">Record audio to transcribe:</label>
       <Button id="audio-record" disabled={!isLoaded} onClick={toggleRecord}>
         {isRecording ? "Stop Recording" : "Start Recording"}
-      </Button> 
+      </Button>
       <h3>Transcript:</h3>
       <p>{result?.transcript}</p>
     </div>
