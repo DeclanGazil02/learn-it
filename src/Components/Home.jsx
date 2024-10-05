@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios';
+import VoiceWidget from "./VoiceWidget";
 
 function Home() {
     const [userEmailFound, setUserEmailFound] = useState(false)
@@ -21,6 +22,7 @@ function Home() {
       <div>
         {userEmailFound ? "found email" : "email not found"}
       </div>
+      <VoiceWidget/>
     </>
   )
 }

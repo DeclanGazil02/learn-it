@@ -47,7 +47,7 @@ function Login() {
       
           if (response.data.successful) {
             console.log('User added successfully!');
-            navigate("/upload")
+            navigate("/tutors")
           } else {
             console.error('Failed to add user:', response.data.message);
             setErrors({email: "Failed to add user."})
