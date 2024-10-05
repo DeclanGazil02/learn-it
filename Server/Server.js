@@ -94,3 +94,16 @@ app.post('/attemptLogin', async (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
+
+
+// Chat Bot
+app.post("/sendToLLM", async (req, res) => {
+  const { prompt } = req.body;
+
+  if(!prompt){
+    return res.status(400).json({ successful: false, message: 'Prompt is required' });
+  }
+
+  console.log(prompt)
+})
+
