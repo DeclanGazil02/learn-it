@@ -2,7 +2,7 @@ import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./Components/Login"
 import SignUp from "./Components/SignUp";
-import Navbar from "./Components/Navbar"
+import NavbarComponent from "./Components/NavbarComponent"
 import Home from "./Components/Home";
 
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -11,7 +11,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Navbar />}>
+        <Route path="/" element={<NavbarComponent />}>
           <Route index element={<Login />} />
           <Route path="signup" element={<SignUp />} />
           <Route path="home" element={<Home />} />
