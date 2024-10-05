@@ -4,6 +4,9 @@ import Login from "./Components/Login"
 import SignUp from "./Components/SignUp";
 import NavbarComponent from "./Components/NavbarComponent"
 import Home from "./Components/Home";
+import Upload from "./Components/Upload"
+import Tutors from "./Components/Tutors"
+
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -15,6 +18,8 @@ export default function App() {
           <Route index element={<Login />} />
           <Route path="signup" element={<SignUp />} />
           <Route path="home" element={<Home />} />
+          <Route path="upload" element={<Upload />} />
+          <Route path="tutors" element={<Tutors />} />
         </Route>
       </Routes>
     </BrowserRouter>
