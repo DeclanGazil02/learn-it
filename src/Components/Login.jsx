@@ -2,9 +2,12 @@ import React, { useState } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import './Login.css';
-
+import axios from 'axios';
+import { useNavigate } from "react-router-dom";
 
 function Login() {
+  const navigate = useNavigate();
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({});
@@ -20,15 +23,39 @@ function Login() {
   };
 
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const formErrors = validateForm();
     if (Object.keys(formErrors).length > 0) {
       setErrors(formErrors);
     } else {
       setErrors({});
-      console.log('Login attempted with:', { email, password });
-      // Here you would typically send a request to your server
+      // Send a request to your server
+      console.log("trying")
+      const response = await axios.get(`http://localhost:8080/checkUserEmail/?email=${email}`)
+      let userEmailFound = response.data.found 
+
+      if(!userEmailFound)
+        setErrors({email: "This account does not exist."})
+      else{
+        try {
+          const response = await axios.post('http://localhost:8080/attemptLogin', {
+            email,
+            password
+          });
+      
+          if (response.data.successful) {
+            console.log('Sign in successful');
+            navigate("/upload")
+          } else {
+            console.error('Failed to sign in:', response.data.message);
+            setErrors({email: "Incorrect Password or User Name."})
+          }
+        } catch (error) {
+          console.error('Error:', error);
+        }
+      }
+      
     }
   };
 

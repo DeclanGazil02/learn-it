@@ -1,14 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import './SignUp.css';
-
+import axios from 'axios';
+import { useNavigate } from "react-router-dom";
 
 function Login() {
+  const navigate = useNavigate();
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({});
-
 
   const validateForm = () => {
     const newErrors = {};
@@ -20,15 +22,40 @@ function Login() {
   };
 
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const formErrors = validateForm();
     if (Object.keys(formErrors).length > 0) {
       setErrors(formErrors);
     } else {
       setErrors({});
-      console.log('Login attempted with:', { email, password });
-      // Here you would typically send a request to your server
+      
+      console.log("trying")
+      // Send a request to your server
+      const response = await axios.get(`http://localhost:8080/checkUserEmail/?email=${email}`)
+      let userEmailFound = response.data.found 
+      console.log("did")
+
+      if(userEmailFound)
+        setErrors({email: "Email already in use."})
+      else{ // create account and redirect
+        try {
+          const response = await axios.post('http://localhost:8080/addUser', {
+            email,
+            password,
+          });
+      
+          if (response.data.successful) {
+            console.log('User added successfully!');
+            navigate("/tutors")
+          } else {
+            console.error('Failed to add user:', response.data.message);
+            setErrors({email: "Failed to add user."})
+          }
+        } catch (error) {
+          console.error('Error:', error);
+        }
+      }
     }
   };
 

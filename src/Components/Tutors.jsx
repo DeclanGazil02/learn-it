@@ -4,6 +4,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import VoiceWidget from './VoiceWidget';
 import './styles.css'; // Import your styles for chat bubble
 
 function Tutors() {
@@ -28,7 +29,7 @@ function Tutors() {
                     {/* Uploads section */}
                     <div className="flex-grow-1">
                         <h2>Uploads</h2>
-                        <p>Upload content goes here</p>
+                        <VoiceWidget/>
                     </div>
 
                     {/* Tutors section */}
