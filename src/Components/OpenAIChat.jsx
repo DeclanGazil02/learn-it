@@ -14,7 +14,7 @@ const OpenAIChat = () => {
                 messages: [{ role: 'user', content: prompt }],
             }, {
                 headers: {
-                    'Authorization': `Bearer YOUR_API_KEY`, // Replace with your API key
+                    'Authorization': `sk-BeUtmTLDZlRzMkO3XCNYB17jeetNk1MLiFnkMZ47BmT3BlbkFJM4wTYaHGjuWI9uplZTrCtte1tAN2WKvkKA53I11XcA`, // Replace with your API key
                     'Content-Type': 'application/json',
                 },
             });

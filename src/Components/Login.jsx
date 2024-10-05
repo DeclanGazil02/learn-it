@@ -37,6 +37,7 @@ function Login() {
 
       if(!userEmailFound)
         setErrors({email: "This account does not exist."})
+      
       else{
         try {
           const response = await axios.post('http://localhost:8080/attemptLogin', {
