@@ -34,4 +34,31 @@ function App() {
   )
 }
 
-export default App
+
+import React, { useState } from 'react';
+import './index.css'; // Make sure your CSS is linked here
+
+function App() {
+  // Use state to manage dark mode
+  const [darkMode, setDarkMode] = useState(false);
+
+  // Toggle the dark mode class on the body
+  const toggleDarkMode = () => {
+    setDarkMode(!darkMode);
+    document.body.classList.toggle('dark-mode', !darkMode);
+  };
+
+  return (
+    <div className={darkMode ? 'dark-mode' : ''}>
+      <h1>Welcome to My React App</h1>
+      <p>This is some content for the website.</p>
+      
+      {/* Add a button to toggle dark mode */}
+      <button onClick={toggleDarkMode}>
+        Toggle Dark Mode
+      </button>
+    </div>
+  );
+}
+
+export default App;
