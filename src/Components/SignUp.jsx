@@ -3,8 +3,11 @@ import { Form, Button, Alert } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import './SignUp.css';
 import axios from 'axios';
+import { useNavigate } from "react-router-dom";
 
 function Login() {
+  const navigate = useNavigate();
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({});
@@ -26,13 +29,33 @@ function Login() {
       setErrors(formErrors);
     } else {
       setErrors({});
-
+      
+      console.log("trying")
       // Send a request to your server
-      const response = await axios.get(`http://localhost:5000/checkUserEmail/?email=${email}`)
+      const response = await axios.get(`http://localhost:8080/checkUserEmail/?email=${email}`)
       let userEmailFound = response.data.found 
+      console.log("did")
 
       if(userEmailFound)
         setErrors({email: "Email already in use."})
+      else{ // create account and redirect
+        try {
+          const response = await axios.post('http://localhost:8080/addUser', {
+            email,
+            password,
+          });
+      
+          if (response.data.successful) {
+            console.log('User added successfully!');
+            navigate("/upload")
+          } else {
+            console.error('Failed to add user:', response.data.message);
+            setErrors({email: "Failed to add user."})
+          }
+        } catch (error) {
+          console.error('Error:', error);
+        }
+      }
     }
   };
 

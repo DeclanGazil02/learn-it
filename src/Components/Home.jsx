@@ -7,7 +7,7 @@ function Home() {
     useEffect(() => {
     
       const checkUserEmail = async () => {
-        const response = await axios.get(`http://localhost:5000/checkUserEmail/?email=${'admin@gmail.com'}`)
+        const response = await axios.get(`http://localhost:8080/checkUserEmail/?email=${'admin@gmail.com'}`)
         setUserEmailFound(response.data.found)
       }
 
