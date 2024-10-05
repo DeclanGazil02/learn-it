@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import './SignUp.css';
 
 
@@ -70,6 +71,11 @@ function Login() {
           <Button variant="primary" type="submit" className="login-button">
             Create Account
           </Button>
+
+          <div className="create-account-text">
+            <p>Already have an account? <Link to="/">Login</Link>
+            </p>
+          </div>
         </Form>
       </div>
     </div>

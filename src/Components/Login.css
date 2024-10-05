@@ -27,3 +27,8 @@
 .login-button {
     width: 100%;
 }
+
+.create-account-text {
+    text-align: center;
+    margin-top: 20px;
+}
