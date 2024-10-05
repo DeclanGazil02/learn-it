@@ -5,6 +5,8 @@ import SignUp from "./Components/SignUp";
 import Navbar from "./Components/Navbar"
 import Home from "./Components/Home";
 
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 export default function App() {
   return (
     <BrowserRouter>
