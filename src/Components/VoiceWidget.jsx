@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useLeopard } from "@picovoice/leopard-react";
 import { Button, Form } from "react-bootstrap"; // Import Form from react-bootstrap
 import axios from "axios";
+import Spinner from 'react-bootstrap/Spinner';
 
 export default function VoiceWidget({ addTutor, email }) { // Accept addTutor as a prop
   const [prompt, setPrompt] = useState('');
@@ -161,6 +162,9 @@ export default function VoiceWidget({ addTutor, email }) { // Accept addTutor as
     }
   };
 
+  console.log(isLoaded)
+  console.log(prompt)
+
   return (
     <div>
       {error && <p className="error-message">{error.toString()}</p>}
@@ -175,13 +179,14 @@ export default function VoiceWidget({ addTutor, email }) { // Accept addTutor as
         disabled={!isLoaded}
         onChange={async (e) => {
           if (!!e.target.files?.length) {
+            setPrompt('')
             await processFile(e.target.files[0]);
           }
         }}
       />
 
       {/* Tutor Name Input Form on the same line */}
-      <Form onSubmit={handleAddTutor} className="d-flex align-items-stretch mb-3"> {/* Use align-items-stretch */}
+      {result?.transcript && prompt ? <Form onSubmit={handleAddTutor} className="d-flex align-items-stretch mb-3"> {/* Use align-items-stretch */}
         <Form.Control
           type="text"
           placeholder="Tutor Name"
@@ -192,7 +197,11 @@ export default function VoiceWidget({ addTutor, email }) { // Accept addTutor as
         <Button variant="primary" type="submit" className="h-100"> {/* Add h-100 class */}
           Add Tutor
         </Button>
-      </Form>
+      </Form> : !isLoaded && prompt === undefined ? <Spinner animation="border" role="status">
+            <span className="visually-hidden">Loading...</span>
+        </Spinner> : isLoaded && prompt === undefined ? null : <Spinner animation="border" role="status">
+            <span className="visually-hidden">Loading...</span>
+        </Spinner>}
     </div>
   );
 }
