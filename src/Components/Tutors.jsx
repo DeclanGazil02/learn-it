@@ -10,15 +10,32 @@ import './styles.css'; // Import your styles for chat bubble
 function Tutors({email}) {
     const [message, setMessage] = useState('');
     const [messages, setMessages] = useState([]); // State to hold chat messages
+    const [selectedTutor, setSelectedTutor] = useState(''); // State to track selected tutor
+    const [tutors, setTutors] = useState(["Tutor A", "Tutor B", "Tutor C", "Tutor D"]); // List of available tutors
 
     const handleSend = (e) => {
         e.preventDefault();
         if (message.trim() === '') return; // Prevent sending empty messages
 
-        // Add the new message to the messages array
-        setMessages([...messages, message]);
+        // Add the user's message to the messages array
+        setMessages((prevMessages) => [...prevMessages, { text: message, sender: 'user' }]);
+
+        // Simulate a bot response
+        const botResponse = `Bot response to: "${message}"`;
+        setMessages((prevMessages) => [...prevMessages, { text: botResponse, sender: 'bot' }]);
+
         console.log("Message sent:", message);
         setMessage(''); // Clear the input after sending
+    };
+
+    const handleTutorSelect = (tutor) => {
+        setSelectedTutor(tutor); // Update selected tutor
+        setMessages([]); // Clear chat messages when a new tutor is selected
+    };
+
+    // Function to add a tutor
+    const addTutor = (tutorName) => {
+        setTutors((prevTutors) => [...prevTutors, tutorName]); // Add the new tutor to the list
     };
 
     return (
@@ -29,13 +46,42 @@ function Tutors({email}) {
                     {/* Uploads section */}
                     <div className="flex-grow-1">
                         <h2>Uploads</h2>
-                        <VoiceWidget/>
+                        <VoiceWidget addTutor={addTutor} /> {/* Pass addTutor to VoiceWidget */}
                     </div>
 
                     {/* Tutors section */}
                     <div className="flex-grow-1">
                         <h2>Tutor Information</h2>
-                        <p>Tutor details go here</p>
+                        <div style={{
+                            height: '380px',  // Set a fixed height for the tutor list
+                            overflowY: 'auto',
+                            border: '1px solid #ccc',
+                            borderRadius: '5px',
+                            padding: '10px',
+                            marginBottom: '20px' // Add margin to separate from the chat section
+                        }}>
+                            {tutors.map((tutor, index) => (
+                                <div
+                                    key={index}
+                                    onClick={() => handleTutorSelect(tutor)}
+                                    style={{
+                                        padding: '10px',
+                                        cursor: 'pointer',
+                                        backgroundColor: selectedTutor === tutor ? '#f1f1f1' : 'transparent',
+                                        borderRadius: '5px',
+                                        marginBottom: '5px'
+                                    }}
+                                >
+                                    {tutor}
+                                </div>
+                            ))}
+                        </div>
+                        {/* Display the selected tutor in a fixed space */}
+                        <div style={{ height: '20px' }}>
+                            {selectedTutor && (
+                                <p>You selected: {selectedTutor}</p>
+                            )}
+                        </div>
                     </div>
                 </Col>
 
@@ -46,8 +92,12 @@ function Tutors({email}) {
                         <div className="chat-container flex-grow-1 overflow-auto">
                             {messages.length > 0 ? (
                                 messages.map((msg, index) => (
-                                    <div key={index} className="chat-bubble">
-                                        {msg}
+                                    <div key={index} className="chat-bubble" style={{
+                                        alignSelf: msg.sender === 'user' ? 'flex-end' : 'flex-start',
+                                        backgroundColor: msg.sender === 'user' ? '#007bff' : '#f1f1f1',
+                                        color: msg.sender === 'user' ? '#fff' : '#000'
+                                    }}>
+                                        {msg.text}
                                     </div>
                                 ))
                             ) : (
@@ -57,15 +107,14 @@ function Tutors({email}) {
                     </div>
 
                     {/* Footer for message input */}
-                    <Form onSubmit={handleSend} className="mt-3 d-flex">
+                    <Form onSubmit={handleSend} className="d-flex">
                         <Form.Control
                             type="text"
-                            placeholder="Type your message..."
+                            placeholder="Type a message"
                             value={message}
                             onChange={(e) => setMessage(e.target.value)}
-                            className="me-2" // margin to the right of the input
                         />
-                        <Button variant="warning" type="submit">Send</Button>
+                        <Button variant="primary" type="submit" className="ms-2">Send</Button>
                     </Form>
                 </Col>
             </Row>
