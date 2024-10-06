@@ -25,8 +25,6 @@ export default function VoiceWidget() {
       };
     initEngine();
   }, [])
-  
-
 
   const toggleRecord = async () => {
     if (isRecording) {
