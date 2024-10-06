@@ -5,10 +5,9 @@ import './SignUp.css';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 
-function Login() {
+function Login({email, setEmail}) {
   const navigate = useNavigate();
 
-  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({});
 
@@ -47,6 +46,7 @@ function Login() {
       
           if (response.data.successful) {
             console.log('User added successfully!');
+            setEmail(email)
             navigate("/tutors")
           } else {
             console.error('Failed to add user:', response.data.message);

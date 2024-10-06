@@ -5,10 +5,9 @@ import './Login.css';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 
-function Login() {
+function Login({email, setEmail}) {
   const navigate = useNavigate();
 
-  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({});
 
@@ -37,7 +36,7 @@ function Login() {
 
       if(!userEmailFound)
         setErrors({email: "This account does not exist."})
-      
+
       else{
         try {
           const response = await axios.post('http://localhost:8080/attemptLogin', {
@@ -47,6 +46,7 @@ function Login() {
       
           if (response.data.successful) {
             console.log('Sign in successful');
+            setEmail(email)
             navigate("/tutors")
           } else {
             console.error('Failed to sign in:', response.data.message);
