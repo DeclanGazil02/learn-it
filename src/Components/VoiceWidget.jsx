@@ -65,35 +65,30 @@ export default function VoiceWidget({ addTutor, email }) { // Accept addTutor as
                 let afterColon = prompt.indexOf(`Question ${i+1}: `)
                 let firstQuestion = prompt.indexOf("?")
                 let question = prompt.substring(afterColon, firstQuestion + 1);
-                console.log(question)
                 
                 // read A
                 let afterA = prompt.indexOf("A:")
                 let beforeB = prompt.indexOf("B")
 
                 let answerA = prompt.substring(afterA, beforeB);
-                console.log(answerA)
 
                 // read B
                 let afterB = prompt.indexOf("B:")
                 let beforeC = prompt.indexOf("C:")
 
                 let answerB = prompt.substring(afterB, beforeC);
-                console.log(answerB)
 
                 // read C
                 let afterC = prompt.indexOf("C:")
                 let beforeD = prompt.indexOf("D:")
 
                 let answerC = prompt.substring(afterC, beforeD);
-                console.log(answerC)
 
                 // read D
                 let afterD = prompt.indexOf("D:")
                 let beforeAnswer = prompt.indexOf("Answer:")
 
                 let answerD = prompt.substring(afterD, beforeAnswer);
-                console.log(answerD)
 
                 // read Answer
                 let afterAnswer = prompt.indexOf("Answer:")
@@ -103,7 +98,6 @@ export default function VoiceWidget({ addTutor, email }) { // Accept addTutor as
                     beforeNext = prompt.length
 
                 let answer = prompt.substring(afterAnswer, beforeNext);
-                console.log(answer)
 
                 prompt = prompt.substring(beforeNext, prompt.length)
 
@@ -117,12 +111,11 @@ export default function VoiceWidget({ addTutor, email }) { // Accept addTutor as
             return questionObjs
         }   
         setQObjs(parseQuestionSet(reply))
-        console.log(reply)
     } catch (error) {
         console.error('Error fetching response:', error);
         setResponse('Error fetching response');
     }
-    console.log(response)
+    console.log("prompt done")
   }
 
   const toggleRecord = async () => {
@@ -135,8 +128,6 @@ export default function VoiceWidget({ addTutor, email }) { // Accept addTutor as
 
   // Function to handle adding a tutor
   const handleAddTutor = async (e) => {
-    console.log("ADDING TUTOR")
-    console.log(email)
     e.preventDefault();
     if (tutorName.trim() === '') return; // Prevent adding empty tutor names
 
@@ -162,9 +153,6 @@ export default function VoiceWidget({ addTutor, email }) { // Accept addTutor as
     }
   };
 
-  console.log(isLoaded)
-  console.log(prompt)
-
   return (
     <div>
       {error && <p className="error-message">{error.toString()}</p>}
@@ -172,7 +160,7 @@ export default function VoiceWidget({ addTutor, email }) { // Accept addTutor as
       {/* Choose audio file to transcribe */}
       <label htmlFor="audio-file">Choose audio file to transcribe: </label>
       <input
-        style={{ marginBottom: '20px' }}
+        style={{ marginBottom: '20px' , marginLeft: "5px"}}
         id="audio-file"
         type="file"
         accept="audio/*"
@@ -180,13 +168,14 @@ export default function VoiceWidget({ addTutor, email }) { // Accept addTutor as
         onChange={async (e) => {
           if (!!e.target.files?.length) {
             setPrompt('')
+            setQObjs([])
             await processFile(e.target.files[0]);
           }
         }}
       />
 
       {/* Tutor Name Input Form on the same line */}
-      {result?.transcript && prompt ? <Form onSubmit={handleAddTutor} className="d-flex align-items-stretch mb-3"> {/* Use align-items-stretch */}
+      {result?.transcript && prompt && qObjs.length !== 0 ? <Form onSubmit={handleAddTutor} className="d-flex align-items-stretch mb-3"> {/* Use align-items-stretch */}
         <Form.Control
           type="text"
           placeholder="Tutor Name"
@@ -197,11 +186,11 @@ export default function VoiceWidget({ addTutor, email }) { // Accept addTutor as
         <Button variant="primary" type="submit" className="h-100"> {/* Add h-100 class */}
           Add Tutor
         </Button>
-      </Form> : !isLoaded && prompt === undefined ? <Spinner animation="border" role="status">
+      </Form> : !isLoaded && prompt === undefined ? <Spinner animation="border" role="status" size="sm" style={{paddingLeft: "5px"}}>
             <span className="visually-hidden">Loading...</span>
-        </Spinner> : isLoaded && prompt === undefined ? null : <Spinner animation="border" role="status">
-            <span className="visually-hidden">Loading...</span>
-        </Spinner>}
+        </Spinner> : isLoaded && prompt === undefined ? null : isLoaded && qObjs.length === 0 ? <Spinner animation="border" role="status" size="sm" style={{paddingLeft: "5px"}}>
+            <span >Loading...</span>
+        </Spinner> : null}
     </div>
   );
 }

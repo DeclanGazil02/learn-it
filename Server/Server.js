@@ -35,7 +35,6 @@ app.get('/checkUserEmail', async (req, res) => {
 
   if(user){
     res.json({ found: true }); // Example response
-    console.log("Found")
   }
   else{
     res.json({ found: false }); // Example response
@@ -114,7 +113,6 @@ app.post('/addTutor', async (req, res) => {
 
 app.get('/getTutors', async (req, res) => {
   const email = req.query.email;
-  console.log("email ", email)
   if (!email) {
     return res.status(400).json({ found: false, message: 'Email required' });
   }
@@ -124,10 +122,33 @@ app.get('/getTutors', async (req, res) => {
   const names = tutors.map(tutor => tutor.tutorName); // Extract tutor names from the result
   if(user && tutors){
     res.json({ successful: true, tutorNames: names }); // Example response
-    console.log("Found")
   }
   else{
     res.json({ successful: false }); // Example response
+  }
+});
+
+app.delete('/deleteTutor', async (req, res) => {
+  const { email, tutorName } = req.body;
+  console.log(email, tutorName);
+  
+  if (!email || !tutorName) {
+    return res.status(400).json({ found: false, message: 'Email and tutorName required' });
+  }
+
+  try {
+    const user = await User.findOne({ email: email });
+    const tutor = await Tutor.findOne({ email: email, tutorName: tutorName });
+
+    if (user && tutor) {
+      await Tutor.deleteOne({ email: email, tutorName: tutorName });
+      return res.json({ successful: true });
+    } else {
+      return res.status(404).json({ successful: false, message: 'User or Tutor not found' });
+    }
+  } catch (error) {
+    console.error('Error deleting tutor:', error);
+    return res.status(500).json({ successful: false, message: 'Internal Server Error' });
   }
 });
 
@@ -142,10 +163,8 @@ app.get('/getQuestions', async (req, res) => {
   const user = await User.findOne({email: email})
   const questionsSet = await Tutor.find({ email: email, tutorName: tutorName }).select('questions'); // Select only the tutorName field
   const questions = questionsSet.map(question => question.questions); // Extract tutor names from the result
-  console.log(questions[0])
   if(user && questionsSet){
     res.json({ successful: true, questions: questions[0] }); // Example response
-    console.log("Found")
   }
   else{
     res.json({ successful: false }); // Example response

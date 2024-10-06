@@ -7,6 +7,7 @@ import Button from 'react-bootstrap/Button';
 import VoiceWidget from './VoiceWidget';
 import './styles.css'; // Import your styles for chat bubble
 import axios from 'axios';
+import { FaTrash } from 'react-icons/fa'; // Importing the trash icon from react-icons
 
 function Tutors({email}) {
     const [message, setMessage] = useState('');
@@ -129,11 +130,33 @@ function Tutors({email}) {
                             ))}
                         </div>
                         {/* Display the selected tutor in a fixed space */}
-                        <div style={{ height: '20px' }}>
-                            {selectedTutor && (
-                                <p>You selected: {selectedTutor}</p>
-                            )}
+                        <div style={{display:"flex", flexDirection: "row", justifyContent:"space-between"}}>
+                            <div style={{ height: '20px' }}>
+                                {selectedTutor && (
+                                    <p>You selected: {selectedTutor}</p>
+                                )}
+                            </div>
+                            <div>
+                                <FaTrash onClick={async () => {
+                                    // remove from database
+                                    try {
+                                        const response = await axios.delete(`http://localhost:8080/deleteTutor`, {
+                                            data: { email, tutorName: selectedTutor }
+                                        });
+                                    
+                                        let suc = response.data.successful;
+                                        if (suc) {
+                                            setSelectedTutor("");
+                                            setTutors(tutors.filter(tutor => tutor !== selectedTutor));
+                                        }
+                                    } catch (error) {
+                                        console.error('Error deleting tutor:', error);
+                                        // Optionally handle the error (e.g., show a message to the user)
+                                    }
+                                }}/>
+                            </div>
                         </div>
+                        
                     </div>
                 </Col>
 
