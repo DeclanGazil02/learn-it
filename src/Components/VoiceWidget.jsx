@@ -10,6 +10,9 @@ export default function VoiceWidget({ addTutor, email }) { // Accept addTutor as
   const [tutorName, setTutorName] = useState(''); // State for tutor name input
   const [qObjs, setQObjs] = useState([])
 
+  const openAIKey = import.meta.env.VITE_OPEN_AI_KEY
+  const picoKey = import.meta.env.VITE_PICO_KEY
+
   const {
     result,
     isLoaded,
@@ -24,7 +27,7 @@ export default function VoiceWidget({ addTutor, email }) { // Accept addTutor as
   useEffect(() => {
     const initEngine = async () => {
       await init(
-        `KTmOBEvRdEQnvqIvYFaj9cSF5qDX1s2SrTZ02uj0Co6Ux1B53EPKAw==`,
+        picoKey,
         { publicPath: "/leopard_params.pv" },
         { enableAutomaticPunctuation: true }
       );
@@ -40,7 +43,6 @@ export default function VoiceWidget({ addTutor, email }) { // Accept addTutor as
   }, [result])
 
   const generateQuestionsAPI = async (prompt) => {
-    console.log("Generating prompt");
 
     let questionObjs = []
     try {
@@ -51,7 +53,7 @@ export default function VoiceWidget({ addTutor, email }) { // Accept addTutor as
                 { role: 'user', content: prompt }],
         }, {
             headers: {
-                Authorization: `Bearer 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`,
+                Authorization: `Bearer ${openAIKey}`,
                 'Content-Type': 'application/json',
             },
         });
@@ -138,7 +140,6 @@ export default function VoiceWidget({ addTutor, email }) { // Accept addTutor as
           tutorName,
           questions: qObjs
         });
-        console.log(response.data)
         if (response.data.successful) {
           console.log('Add successful');
           addTutor(tutorName); // Call the passed function to add the tutor
@@ -189,7 +190,7 @@ export default function VoiceWidget({ addTutor, email }) { // Accept addTutor as
       </Form> : !isLoaded && prompt === undefined ? <Spinner animation="border" role="status" size="sm" style={{paddingLeft: "5px"}}>
             <span className="visually-hidden">Loading...</span>
         </Spinner> : isLoaded && prompt === undefined ? null : isLoaded && qObjs.length === 0 ? <Spinner animation="border" role="status" size="sm" style={{paddingLeft: "5px"}}>
-            <span >Loading...</span>
+            <span className="visually-hidden">Loading...</span>
         </Spinner> : null}
     </div>
   );
