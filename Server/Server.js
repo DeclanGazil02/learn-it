@@ -134,23 +134,23 @@ app.get('/getTutors', async (req, res) => {
 app.get('/getQuestions', async (req, res) => {
   const email = req.query.email;
   const tutorName = req.query.tutorName;
-  if (!email || tutorName) {
+
+  if (!email || !tutorName) {
     return res.status(400).json({ found: false, message: 'Email and tutor name required' });
   }
 
   const user = await User.findOne({email: email})
   const questionsSet = await Tutor.find({ email: email, tutorName: tutorName }).select('questions'); // Select only the tutorName field
-  const questions = tutors.map(tutor => tutor.questions); // Extract tutor names from the result
-  
+  const questions = questionsSet.map(question => question.questions); // Extract tutor names from the result
+  console.log(questions[0])
   if(user && questionsSet){
-    res.json({ successful: true, questions: questions }); // Example response
+    res.json({ successful: true, questions: questions[0] }); // Example response
     console.log("Found")
   }
   else{
     res.json({ successful: false }); // Example response
   }
 });
-
 
 
 app.listen(PORT, () => {

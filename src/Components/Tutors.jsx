@@ -13,10 +13,12 @@ function Tutors({email}) {
     const [messages, setMessages] = useState([]); // State to hold chat messages
     const [selectedTutor, setSelectedTutor] = useState(''); // State to track selected tutor
     const [tutors, setTutors] = useState([]); // List of available tutors
+    const [questions, setQuestions] = useState([])
+
+    const [questionTracker, setQuestionTracker] = useState(0);
 
     useEffect( () => {
         const getTutorNames = async () => {
-            console.log(email)
             const response = await axios.get(`http://localhost:8080/getTutors/?email=${email}`)
             let suc = response.data.successful
             if(suc){
@@ -30,12 +32,34 @@ function Tutors({email}) {
     const handleSend = (e) => {
         e.preventDefault();
         if (message.trim() === '') return; // Prevent sending empty messages
+        
+        if(questionTracker !== 0){
+            // check for previous answer
+            let prev = questions[questionTracker - 1];
+            setMessages((prevMessages) => [...prevMessages, { text: prev.answer, sender: 'bot' }]);
+        }
+
+
+        if(questionTracker === 10)
+            setQuestionTracker(0)
+
+        console.log(questions)
+        console.log(questionTracker)
+        let q = questions[questionTracker]
+
+        let botResponse = q.question
+        for(let i = 0; i < q.options.length; i++){
+            botResponse += "\n"
+            botResponse += q.options[i].text
+        }
+        setQuestionTracker(questionTracker+1)
+
+        console.log(botResponse)
 
         // Add the user's message to the messages array
         setMessages((prevMessages) => [...prevMessages, { text: message, sender: 'user' }]);
 
         // Simulate a bot response
-        const botResponse = `Bot response to: "${message}"`;
         setMessages((prevMessages) => [...prevMessages, { text: botResponse, sender: 'bot' }]);
 
         console.log("Message sent:", message);
@@ -43,6 +67,20 @@ function Tutors({email}) {
     };
 
     const handleTutorSelect = (tutor) => {
+        
+        // get api for tutor question set
+        const getQuestionSet = async () => {
+            const response = await axios.get(`http://localhost:8080/getQuestions/?email=${email}&tutorName=${tutor}`)
+            let suc = response.data.successful
+            if(suc){
+                console.log(response.data.questions)
+                setQuestions(response.data.questions)
+            }
+        }
+        getQuestionSet()
+
+        setQuestionTracker(0)
+
         setSelectedTutor(tutor); // Update selected tutor
         setMessages([]); // Clear chat messages when a new tutor is selected
     };
@@ -115,7 +153,7 @@ function Tutors({email}) {
                                     </div>
                                 ))
                             ) : (
-                                <p>No messages yet.</p>
+                                <p>Type Start to Chat!</p>
                             )}
                         </div>
                     </div>
