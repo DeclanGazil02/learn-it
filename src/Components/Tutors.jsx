@@ -11,8 +11,7 @@ function Tutors() {
     const [message, setMessage] = useState('');
     const [messages, setMessages] = useState([]); // State to hold chat messages
     const [selectedTutor, setSelectedTutor] = useState(''); // State to track selected tutor
-
-    const tutors = ["Tutor A", "Tutor B", "Tutor C", "Tutor D"]; // List of available tutors
+    const [tutors, setTutors] = useState(["Tutor A", "Tutor B", "Tutor C", "Tutor D"]); // List of available tutors
 
     const handleSend = (e) => {
         e.preventDefault();
@@ -34,6 +33,11 @@ function Tutors() {
         setMessages([]); // Clear chat messages when a new tutor is selected
     };
 
+    // Function to add a tutor
+    const addTutor = (tutorName) => {
+        setTutors((prevTutors) => [...prevTutors, tutorName]); // Add the new tutor to the list
+    };
+
     return (
         <Container fluid style={{ height: '93vh' }}>
             <Row className="h-100">
@@ -42,7 +46,7 @@ function Tutors() {
                     {/* Uploads section */}
                     <div className="flex-grow-1">
                         <h2>Uploads</h2>
-                        <VoiceWidget />
+                        <VoiceWidget addTutor={addTutor} /> {/* Pass addTutor to VoiceWidget */}
                     </div>
 
                     {/* Tutors section */}
@@ -103,15 +107,14 @@ function Tutors() {
                     </div>
 
                     {/* Footer for message input */}
-                    <Form onSubmit={handleSend} className="mt-3 d-flex">
+                    <Form onSubmit={handleSend} className="d-flex">
                         <Form.Control
                             type="text"
-                            placeholder="Type your message..."
+                            placeholder="Type a message"
                             value={message}
                             onChange={(e) => setMessage(e.target.value)}
-                            className="me-2" // margin to the right of the input
                         />
-                        <Button variant="warning" type="submit">Send</Button>
+                        <Button variant="primary" type="submit" className="ms-2">Send</Button>
                     </Form>
                 </Col>
             </Row>
