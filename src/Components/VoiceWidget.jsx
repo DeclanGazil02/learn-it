@@ -18,7 +18,7 @@ export default function VoiceWidget() {
     const initEngine = async () => {
       await init(
         `KTmOBEvRdEQnvqIvYFaj9cSF5qDX1s2SrTZ02uj0Co6Ux1B53EPKAw==`,
-        { publicPath: "/leopard_params.pv" },
+        { publicPath: "./publ/leopard_params.pv" },
         { enableAutomaticPunctuation: true }
       );
     };
@@ -41,6 +41,7 @@ export default function VoiceWidget() {
 
       <label htmlFor="audio-file">Choose audio file to transcribe:</label>
       <input
+        style={{ marginBottom: '20px' }}
         id="audio-file"
         type="file"
         accept="audio/*"
@@ -51,11 +52,12 @@ export default function VoiceWidget() {
           }
         }}
       />
-      <br />
-      <label htmlFor="audio-record">Record audio to transcribe:</label>
+
+      <label style={{ marginBottom: '20px' }} htmlFor="audio-record">Record audio to transcribe:</label>
       <Button id="audio-record" disabled={!isLoaded} onClick={toggleRecord}>
         {isRecording ? "Stop Recording" : "Start Recording"}
       </Button>
+
       <h3>Transcript:</h3>
       <p>{result?.transcript}</p>
     </div>
