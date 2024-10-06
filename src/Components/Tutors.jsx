@@ -7,7 +7,7 @@ import Button from 'react-bootstrap/Button';
 import VoiceWidget from './VoiceWidget';
 import './styles.css'; // Import your styles for chat bubble
 
-function Tutors() {
+function Tutors({email}) {
     const [message, setMessage] = useState('');
     const [messages, setMessages] = useState([]); // State to hold chat messages
 
