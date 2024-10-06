@@ -35,35 +35,31 @@ function Tutors({email}) {
         if (message.trim() === '') return; // Prevent sending empty messages
         
         if(questionTracker !== 0){
-            // check for previous answer
             let prev = questions[questionTracker - 1];
             setMessages((prevMessages) => [...prevMessages, { text: prev.answer, sender: 'bot' }]);
         }
-
-
+    
         if(questionTracker === 10)
             setQuestionTracker(0)
-
-        console.log(questions)
-        console.log(questionTracker)
-        let q = questions[questionTracker]
-
-        let botResponse = q.question
+    
+        let q = questions[questionTracker];
+        let botResponse = q.question;
+    
         for(let i = 0; i < q.options.length; i++){
-            botResponse += "\n"
-            botResponse += q.options[i].text
+            botResponse += "\n" + q.options[i].text; // Concatenate with new line
         }
-        setQuestionTracker(questionTracker+1)
-
-        console.log(botResponse)
-
+        
+        // Split the response by new lines
+        const botResponseLines = botResponse.split('\n');
+        setQuestionTracker(questionTracker + 1);
+    
         // Add the user's message to the messages array
-        setMessages((prevMessages) => [...prevMessages, { text: message, sender: 'user' }]);
-
-        // Simulate a bot response
-        setMessages((prevMessages) => [...prevMessages, { text: botResponse, sender: 'bot' }]);
-
-        console.log("Message sent:", message);
+        setMessages((prevMessages) => [
+            ...prevMessages,
+            { text: message, sender: 'user' },
+            { text: botResponseLines, sender: 'bot' } // Store lines for rendering
+        ]);
+    
         setMessage(''); // Clear the input after sending
     };
 
@@ -97,13 +93,13 @@ function Tutors({email}) {
                 {/* Left side for uploads and tutor information */}
                 <Col sm={6} className="p-3 bg-light d-flex flex-column" style={{ height: '100%' }}>
                     {/* Uploads section */}
-                    <div className="flex-grow-1">
+                    <div className="flex-grow-1" >
                         <h2>Uploads</h2>
                         <VoiceWidget addTutor={addTutor} email={email}/> {/* Pass addTutor to VoiceWidget */}
                     </div>
 
                     {/* Tutors section */}
-                    <div className="flex-grow-1">
+                    <div className="flex-grow-1" >
                         <h2>Tutor Information</h2>
                         <div style={{
                             height: '380px',  // Set a fixed height for the tutor list
@@ -111,7 +107,7 @@ function Tutors({email}) {
                             border: '1px solid #ccc',
                             borderRadius: '5px',
                             padding: '10px',
-                            marginBottom: '20px' // Add margin to separate from the chat section
+                            marginBottom: '20px', // Add margin to separate from the chat section
                         }}>
                             {tutors.map((tutor, index) => (
                                 <div
@@ -165,19 +161,32 @@ function Tutors({email}) {
                     <div className="flex-grow-1 d-flex flex-column">
                         <h2>Chat</h2>
                         <div className="chat-container flex-grow-1 overflow-auto">
-                            {messages.length > 0 ? (
-                                messages.map((msg, index) => (
-                                    <div key={index} className="chat-bubble" style={{
-                                        alignSelf: msg.sender === 'user' ? 'flex-end' : 'flex-start',
-                                        backgroundColor: msg.sender === 'user' ? '#007bff' : '#f1f1f1',
-                                        color: msg.sender === 'user' ? '#fff' : '#000'
-                                    }}>
-                                        {msg.text}
-                                    </div>
-                                ))
-                            ) : (
+                        {messages.length > 0 ? (
+                            messages.map((msg, index) => (
+                                <div key={index} className="chat-bubble" style={{
+                                    alignSelf: msg.sender === 'user' ? 'flex-end' : 'flex-start',
+                                    backgroundColor: msg.sender === 'user' ? '#007bff' : '#f1f1f1',
+                                    color: msg.sender === 'user' ? '#fff' : '#000'
+                                }}>
+                                    {Array.isArray(msg.text) ? (
+                                        msg.text.map((line, lineIndex) => (
+                                            <div key={lineIndex}>{line}</div> // Render each line separately
+                                        ))
+                                    ) : (
+                                        <span>{msg.text}</span>
+                                    )}
+                                </div>
+                            ))
+                        ) : (
+                            <div style={{
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center", // Center vertically
+                                width: "100%", // Ensure it takes full height of the container
+                            }}>
                                 <p>Type Start to Chat!</p>
-                            )}
+                            </div>
+                        )}
                         </div>
                     </div>
 
