@@ -5,7 +5,6 @@ import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 
 function Upload() {
-    const [count, setCount] = useState(0);
 
     return (
         <div className="d-flex justify-content-center align-items-center vh-100">
