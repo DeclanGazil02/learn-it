@@ -19,8 +19,6 @@ export default function App() {
         <Route path="/" element={<NavbarComponent />}>
           <Route index element={<Login email={email} setEmail={setEmail}/>} />
           <Route path="signup" element={<SignUp email={email} setEmail={setEmail}/>} />
-          <Route path="home" element={<Home />} />
-          <Route path="upload" element={<Upload />} />
           <Route path="tutors" element={<Tutors email={email}/>} />
         </Route>
       </Routes>

@@ -43,7 +43,7 @@ function Login({email, setEmail}) {
             email,
             password
           });
-      
+          console.log(response.data)
           if (response.data.successful) {
             console.log('Sign in successful');
             setEmail(email)

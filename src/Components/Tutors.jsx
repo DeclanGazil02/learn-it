@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -6,12 +6,26 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import VoiceWidget from './VoiceWidget';
 import './styles.css'; // Import your styles for chat bubble
+import axios from 'axios';
 
 function Tutors({email}) {
     const [message, setMessage] = useState('');
     const [messages, setMessages] = useState([]); // State to hold chat messages
     const [selectedTutor, setSelectedTutor] = useState(''); // State to track selected tutor
-    const [tutors, setTutors] = useState(["Tutor A", "Tutor B", "Tutor C", "Tutor D"]); // List of available tutors
+    const [tutors, setTutors] = useState([]); // List of available tutors
+
+    useEffect( () => {
+        const getTutorNames = async () => {
+            console.log(email)
+            const response = await axios.get(`http://localhost:8080/getTutors/?email=${email}`)
+            let suc = response.data.successful
+            if(suc){
+                console.log(response.data.tutorNames)
+                setTutors(response.data.tutorNames)
+            }
+        }
+        getTutorNames()
+    }, [])
 
     const handleSend = (e) => {
         e.preventDefault();
@@ -46,7 +60,7 @@ function Tutors({email}) {
                     {/* Uploads section */}
                     <div className="flex-grow-1">
                         <h2>Uploads</h2>
-                        <VoiceWidget addTutor={addTutor} /> {/* Pass addTutor to VoiceWidget */}
+                        <VoiceWidget addTutor={addTutor} email={email}/> {/* Pass addTutor to VoiceWidget */}
                     </div>
 
                     {/* Tutors section */}
